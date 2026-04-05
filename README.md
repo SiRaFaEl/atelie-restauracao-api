@@ -1,6 +1,6 @@
-# 🪑 Ateliê de Restauração API
+#  Ateliê de Restauração API
 
-## 📌 Descrição
+##  Descrição
 
 API desenvolvida com NestJS para gerenciamento de ateliês de restauração e seus projetos de móveis.
 
@@ -8,7 +8,7 @@ O sistema permite cadastrar ateliês, criar projetos vinculados a eles e aplicar
 
 ---
 
-## 🏗️ Arquitetura
+##  Arquitetura
 
 O projeto segue uma arquitetura em camadas:
 
@@ -19,7 +19,7 @@ O projeto segue uma arquitetura em camadas:
 
 ---
 
-## ⚙️ Tecnologias utilizadas
+##  Tecnologias utilizadas
 
 - NestJS
 - TypeORM
@@ -29,7 +29,7 @@ O projeto segue uma arquitetura em camadas:
 
 ---
 
-## 🧱 Entidades
+##  Entidades
 
 ### Ateliê
 - especialidadeEra
@@ -48,7 +48,7 @@ Relacionamento: **1:N (um ateliê possui vários projetos)**
 
 ---
 
-## 📊 Regras de negócio implementadas
+##  Regras de negócio implementadas
 
 - Campos obrigatórios
 - Data de fundação não pode ser futura
@@ -61,7 +61,7 @@ Relacionamento: **1:N (um ateliê possui vários projetos)**
 
 ---
 
-## 🚀 Como executar o projeto
+##  Como executar o projeto
 
 ```bash
 npm install
