@@ -8,28 +8,22 @@ import {
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
+  private extractMessage(exception: unknown): string | string[] {
+    if (exception instanceof HttpException) {
+      const response = exception.getResponse();
+      if (typeof response === 'string') return response;
+      if (typeof response === 'object' && response && 'message' in response) {
+        return (response as { message: string | string[] }).message;
+      }
+    }
+    return 'Erro interno do servidor';
+  }
+
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
-
-    let status = HttpStatus.INTERNAL_SERVER_ERROR;
-    let message: string | string[] = 'Erro interno do servidor';
-
-    if (exception instanceof HttpException) {
-      status = exception.getStatus();
-      const exceptionResponse = exception.getResponse();
-
-      if (typeof exceptionResponse === 'string') {
-        message = exceptionResponse;
-      } else if (
-        typeof exceptionResponse === 'object' &&
-        exceptionResponse !== null &&
-        'message' in exceptionResponse
-      ) {
-        message = (exceptionResponse as { message: string | string[] }).message;
-      }
-    }
-
+    const status = exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
+    const message = this.extractMessage(exception);
     response.status(status).json({
       statusCode: status,
       message,

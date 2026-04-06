@@ -5,6 +5,8 @@ import { UpdateAtelieDto } from '../../presentation/dtos/update-atelie.dto';
 
 @Injectable()
 export class AtelieService {
+  private static readonly MIN_AREA_OFICINA_M2 = 50;
+
   constructor(
     @Inject('AtelieRepositoryPort')
     private readonly atelieRepository: AtelieRepositoryPort,
@@ -15,16 +17,8 @@ export class AtelieService {
       throw new BadRequestException('Todos os campos do ateliê devem ser preenchidos.');
     }
 
-    const dataFundacao = new Date(dto.dataFundacao);
-    const hoje = new Date();
-
-    if (dataFundacao > hoje) {
-      throw new BadRequestException('Data de fundação não pode ser no futuro.');
-    }
-
-    if (dto.areaOficinaM2 < 50) {
-      throw new BadRequestException('A área da oficina deve ser maior ou igual a 50 m².');
-    }
+    this.validateDataFundacao(dto.dataFundacao);
+    this.validateAreaOficina(dto.areaOficinaM2);
 
     return this.atelieRepository.create(dto);
   }
@@ -55,16 +49,11 @@ export class AtelieService {
 
   async update(id: number, dto: UpdateAtelieDto) {
     if (dto.dataFundacao) {
-      const dataFundacao = new Date(dto.dataFundacao);
-      const hoje = new Date();
-
-      if (dataFundacao > hoje) {
-        throw new BadRequestException('Data de fundação não pode ser no futuro.');
-      }
+      this.validateDataFundacao(dto.dataFundacao);
     }
 
-    if (dto.areaOficinaM2 !== undefined && dto.areaOficinaM2 < 50) {
-      throw new BadRequestException('A área da oficina deve ser maior ou igual a 50 m².');
+    if (dto.areaOficinaM2 !== undefined) {
+      this.validateAreaOficina(dto.areaOficinaM2);
     }
 
     return this.atelieRepository.update(id, dto);
@@ -72,5 +61,19 @@ export class AtelieService {
 
   async delete(id: number) {
     await this.atelieRepository.delete(id);
+  }
+
+  private validateDataFundacao(dataFundacao: string): void {
+    const data = new Date(dataFundacao);
+    const hoje = new Date();
+    if (data > hoje) {
+      throw new BadRequestException('Data de fundação não pode ser no futuro.');
+    }
+  }
+
+  private validateAreaOficina(areaOficinaM2: number): void {
+    if (areaOficinaM2 < AtelieService.MIN_AREA_OFICINA_M2) {
+      throw new BadRequestException(`A área da oficina deve ser maior ou igual a ${AtelieService.MIN_AREA_OFICINA_M2} m².`);
+    }
   }
 }

@@ -12,6 +12,10 @@ import { UpdateProjetoMovelDto } from '../../presentation/dtos/update-projeto-mo
 
 @Injectable()
 export class ProjetoMovelService {
+  private static readonly MIN_HORAS_HOMEM = 10;
+  private static readonly MAX_HORAS_HOMEM = 1000;
+  private static readonly MIN_HORAS_RESTAURADO = 40;
+
   constructor(
     @Inject('ProjetoMovelRepositoryPort')
     private readonly projetoRepository: ProjetoMovelRepositoryPort,
@@ -21,15 +25,7 @@ export class ProjetoMovelService {
   ) {}
 
   async create(dto: CreateProjetoMovelDto) {
-    if (
-      !dto.tipoMovel ||
-      !dto.dataInicioTrab ||
-      dto.restaurado === undefined ||
-      dto.horasHomem === undefined ||
-      dto.atelieId === undefined
-    ) {
-      throw new BadRequestException('Todos os campos do projeto devem ser preenchidos.');
-    }
+    this.validateCamposObrigatorios(dto);
 
     const atelie = await this.atelieRepository.findById(dto.atelieId);
 
@@ -37,24 +33,9 @@ export class ProjetoMovelService {
       throw new NotFoundException('Ateliê não encontrado.');
     }
 
-    const dataInicio = new Date(dto.dataInicioTrab);
-    const dataFundacao = new Date(atelie.dataFundacao);
+    this.validateDataInicio(dto.dataInicioTrab, atelie.dataFundacao);
 
-    if (dataInicio < dataFundacao) {
-      throw new BadRequestException('A data de início do trabalho não pode ser anterior à fundação do ateliê.');
-    }
-
-    if (dto.horasHomem < 10 || dto.horasHomem > 1000) {
-      throw new BadRequestException('As horas-homem devem estar entre 10 e 1000.');
-    }
-
-    if (dto.restaurado === true && dto.horasHomem < 40) {
-      throw new BadRequestException('Se o projeto estiver restaurado, deve ter no mínimo 40 horas-homem.');
-    }
-
-    if (dto.restaurado === false && dto.horasHomem === 0) {
-      throw new BadRequestException('Projeto em andamento não pode ter 0 horas-homem.');
-    }
+    this.validateHorasHomem(dto.horasHomem, dto.restaurado);
 
     const duplicate = await this.projetoRepository.findDuplicateOpenProject(dto.atelieId, dto.tipoMovel);
 
@@ -124,5 +105,37 @@ export class ProjetoMovelService {
 
   async delete(id: number) {
     await this.projetoRepository.delete(id);
+  }
+
+  private validateCamposObrigatorios(dto: CreateProjetoMovelDto): void {
+    if (
+      !dto.tipoMovel ||
+      !dto.dataInicioTrab ||
+      dto.restaurado === undefined ||
+      dto.horasHomem === undefined ||
+      dto.atelieId === undefined
+    ) {
+      throw new BadRequestException('Todos os campos do projeto devem ser preenchidos.');
+    }
+  }
+
+  private validateHorasHomem(horasHomem: number, restaurado: boolean): void {
+    if (horasHomem < ProjetoMovelService.MIN_HORAS_HOMEM || horasHomem > ProjetoMovelService.MAX_HORAS_HOMEM) {
+      throw new BadRequestException(`As horas-homem devem estar entre ${ProjetoMovelService.MIN_HORAS_HOMEM} e ${ProjetoMovelService.MAX_HORAS_HOMEM}.`);
+    }
+    if (restaurado && horasHomem < ProjetoMovelService.MIN_HORAS_RESTAURADO) {
+      throw new BadRequestException(`Se o projeto estiver restaurado, deve ter no mínimo ${ProjetoMovelService.MIN_HORAS_RESTAURADO} horas-homem.`);
+    }
+    if (!restaurado && horasHomem === 0) {
+      throw new BadRequestException('Projeto em andamento não pode ter 0 horas-homem.');
+    }
+  }
+
+  private validateDataInicio(dataInicio: string, dataFundacaoAtelie: string): void {
+    const inicio = new Date(dataInicio);
+    const fundacao = new Date(dataFundacaoAtelie);
+    if (inicio < fundacao) {
+      throw new BadRequestException('A data de início do trabalho não pode ser anterior à fundação do ateliê.');
+    }
   }
 }
