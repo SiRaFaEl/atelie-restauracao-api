@@ -1,25 +1,25 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsDateString, IsInt, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsString, IsNotEmpty, IsDateString, IsBoolean, IsNumber } from 'class-validator';
 
 export class CreateProjetoMovelDto {
-  @ApiProperty({ example: 'Cômoda Luís XV' })
-  @IsString()
-  @IsNotEmpty()
+  @ApiProperty()
+  @IsString({ message: 'tipoMovel deve ser um texto.' })
+  @IsNotEmpty({ message: 'tipoMovel é obrigatório.' })
   tipoMovel!: string;
 
-  @ApiProperty({ example: '2024-08-15' })
-  @IsDateString()
+  @ApiProperty()
+  @IsDateString({}, { message: 'dataInicioTrab deve ser uma data válida.' })
   dataInicioTrab!: string;
 
-  @ApiProperty({ example: false })
-  @IsBoolean()
+  @ApiProperty()
+  @IsBoolean({ message: 'restaurado deve ser verdadeiro ou falso.' })
   restaurado!: boolean;
 
-  @ApiProperty({ example: 120 })
-  @IsNumber()
+  @ApiProperty()
+  @IsNumber({}, { message: 'horasHomem deve ser um número.' })
   horasHomem!: number;
 
-  @ApiProperty({ example: 1 })
-  @IsInt()
+  @ApiProperty()
+  @IsNumber({}, { message: 'atelieId deve ser um número.' })
   atelieId!: number;
 }

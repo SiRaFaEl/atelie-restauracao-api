@@ -2,11 +2,28 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AllExceptionsFilter } from './shared/filters/all-exceptions.filter';
+import { ValidationPipe, BadRequestException } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-   app.useGlobalFilters(new AllExceptionsFilter());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+      exceptionFactory: (errors) => {
+        const mensagens = errors.flatMap((error) => {
+          if (!error.constraints) return [];
+          return Object.values(error.constraints);
+        });
+
+        return new BadRequestException(mensagens);
+      },
+    }),
+  );
+
+  app.useGlobalFilters(new AllExceptionsFilter());
 
   const config = new DocumentBuilder()
     .setTitle('Ateliê Restauração API')

@@ -1,21 +1,21 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsDateString, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsString, IsNotEmpty, IsDateString, IsBoolean, IsNumber } from 'class-validator';
 
 export class CreateAtelieDto {
-  @ApiProperty({ example: 'Art Déco' })
-  @IsString()
-  @IsNotEmpty()
+  @ApiProperty()
+  @IsString({ message: 'especialidadeEra deve ser um texto.' })
+  @IsNotEmpty({ message: 'especialidadeEra é obrigatório.' })
   especialidadeEra!: string;
 
-  @ApiProperty({ example: '2020-05-10' })
-  @IsDateString()
+  @ApiProperty()
+  @IsDateString({}, { message: 'dataFundacao deve ser uma data válida.' })
   dataFundacao!: string;
 
-  @ApiProperty({ example: true })
-  @IsBoolean()
+  @ApiProperty()
+  @IsBoolean({ message: 'equipadoCompleto deve ser verdadeiro ou falso.' })
   equipadoCompleto!: boolean;
 
-  @ApiProperty({ example: 80 })
-  @IsNumber()
+  @ApiProperty()
+  @IsNumber({}, { message: 'areaOficinaM2 deve ser um número.' })
   areaOficinaM2!: number;
 }
