@@ -3,12 +3,8 @@
 ##  Integrante(s)
 Rafael Oliveira Alves
 
----
-
 ##  Tema
 Tema 9 – Estúdio de Restauração de Móveis Antigos
-
----
 
 ##  Descrição
 
@@ -80,6 +76,19 @@ Projeto de Móvel
 - PATCH /projetos/:id → Atualizar
 - DELETE /projetos/:id → Remover
 
+---
+## Banco de Dados
+
+O projeto utiliza SQLite.
+
+Arquivo:
+
+data/tema9.db
+
+Contém dados de teste para validação dos endpoints.
+
+---
+
 ## Regras de negócio implementadas
 
 - Todos os campos são obrigatórios  
@@ -93,8 +102,24 @@ Projeto de Móvel
 
 ---
 
+## Divisão de Tarefas
+
+Desenvolvimento realizado individualmente por:
+
+Rafael Oliveira Alves
+
+Responsável por:
+
+- Modelagem das entidades
+- Implementação do CRUD
+- Regras de negócio
+- Integração com banco de dados
+- Documentação e testes via Swagger
+
 ## Como executar o projeto
 
 ```bash
 npm install
 npm run start:dev
+
+
