@@ -1,26 +1,33 @@
 #  Ateliê de Restauração API
 
-##  Descrição
+##  Integrante(s)
+Rafael Oliveira Alves
 
+---
+
+##  Tema
+Tema 9 – Estúdio de Restauração de Móveis Antigos
+
+---
+
+##  Descrição
 API desenvolvida com NestJS para gerenciamento de ateliês de restauração e seus projetos de móveis.
 
-O sistema permite cadastrar ateliês, criar projetos vinculados a eles e aplicar regras de negócio conforme o Tema 9 da atividade.
+O sistema permite cadastrar ateliês, criar projetos vinculados a eles e aplicar regras de negócio conforme especificado na atividade.
 
 ---
 
 ##  Arquitetura
-
 O projeto segue uma arquitetura em camadas:
 
-- **presentation** → controllers e DTOs
-- **application** → services e regras de negócio
-- **infrastructure** → persistência com TypeORM
-- **shared** → configurações globais e filtros
+- **presentation** → Controllers e DTOs
+- **application** → Services e regras de negócio
+- **infrastructure** → Persistência com TypeORM
+- **shared** → Configurações globais e tratamento de exceções
 
 ---
 
 ##  Tecnologias utilizadas
-
 - NestJS
 - TypeORM
 - SQLite
@@ -32,32 +39,33 @@ O projeto segue uma arquitetura em camadas:
 ##  Entidades
 
 ### Ateliê
-- especialidadeEra
-- dataFundacao
-- equipadoCompleto
-- areaOficinaM2
+- especialidadeEra (string)
+- dataFundacao (date)
+- equipadoCompleto (boolean)
+- areaOficinaM2 (number)
 
 ### ProjetoMovel
-- tipoMovel
-- dataInicioTrab
-- restaurado
-- horasHomem
-- atelieId
+- tipoMovel (string)
+- dataInicioTrab (date)
+- restaurado (boolean)
+- horasHomem (number)
+- atelieId (FK)
 
-Relacionamento: **1:N (um ateliê possui vários projetos)**
+ Relacionamento: 1:N  
+Um ateliê pode possuir vários projetos de móveis.
 
 ---
 
 ##  Regras de negócio implementadas
 
-- Campos obrigatórios
+- Todos os campos são obrigatórios
 - Data de fundação não pode ser futura
-- Área mínima de 50 m²
+- Área mínima do ateliê: 50m²
 - Projeto deve estar vinculado a um ateliê existente
-- Data do projeto não pode ser anterior à fundação
-- Horas entre 10 e 1000
-- Se restaurado = true → mínimo 40 horas
-- Não permitir duplicidade de projeto em aberto
+- Data do projeto não pode ser anterior à fundação do ateliê
+- Horas de trabalho entre 10 e 1000
+- Se restaurado = true → mínimo de 40 horas
+- Não permitir duplicidade de projeto em aberto para o mesmo tipo de móvel
 
 ---
 
