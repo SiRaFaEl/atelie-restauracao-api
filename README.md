@@ -65,20 +65,20 @@ Um ateliê pode possuir vários projetos de móveis.
 
 Ateliê
 
--POST /atelies → Criar ateliê
--GET /atelies → Listar todos
--GET /atelies/:id → Buscar por ID
--PATCH /atelies/:id → Atualizar
--DELETE /atelies/:id → Remover
--GET /atelies/:id/projetos → Buscar ateliê com projetos
+- POST /atelies → Criar ateliê
+- GET /atelies → Listar todos
+- GET /atelies/:id → Buscar por ID
+- PATCH /atelies/:id → Atualizar
+- DELETE /atelies/:id → Remover
+- GET /atelies/:id/projetos → Buscar ateliê com projetos
 
 Projeto de Móvel
 
--POST /projetos → Criar projeto
--GET /projetos → Listar todos
--GET /projetos/:id → Buscar por ID
--PATCH /projetos/:id → Atualizar
--DELETE /projetos/:id → Remover
+- POST /projetos → Criar projeto
+- GET /projetos → Listar todos
+- GET /projetos/:id → Buscar por ID
+- PATCH /projetos/:id → Atualizar
+- DELETE /projetos/:id → Remover
 
 ## Regras de negócio implementadas
 
