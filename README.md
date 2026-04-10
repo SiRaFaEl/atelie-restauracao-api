@@ -66,7 +66,7 @@ Ateliê
 - GET /atelies/:id → Buscar por ID
 - PATCH /atelies/:id → Atualizar
 - DELETE /atelies/:id → Remover
-- GET /atelies/:id/projetos → Buscar ateliê com projetos
+- GET /atelies/:id/com-projetos → Buscar ateliê com projetos
 
 Projeto de Móvel
 
@@ -116,15 +116,19 @@ Responsável por:
 - Integração com banco de dados
 - Documentação e testes via Swagger
 
+---
+## Swagger
+
+Acesse a documentação interativa da API em:
+http://localhost:3000/docs
+
+---
 ## Como executar o projeto
 
 ```bash
 npm install
 npm run start:dev
 
-## Swagger
 
-Acesse a documentação interativa da API em:
-http://localhost:3000/docs
 
 
