@@ -1,7 +1,199 @@
-# Ateliê de Restauração API
+# Ateliê Restauração - Monorepo
 
-##  Integrante(s)
-Rafael Oliveira Alves
+Sistema completo para gerenciamento de ateliês e projetos de móveis com autenticação JWT, desenvolvido com NestJS e Angular 20 em uma estrutura de monorepo com Turborepo.
+
+## 🚀 Funcionalidades
+
+- **Autenticação JWT**: Login seguro com Bearer tokens
+- **Controle de Acesso**: Admin pode gerenciar ativação de usuários
+- **CRUD de Atelies**: Criar, ler, atualizar e deletar atelies
+- **CRUD de Projetos**: Gerenciar projetos associados aos atelies
+- **Validações de Negócio**: Regras de domínio robustas no backend
+- **Dashboard**: Interface responsiva com Tailwind CSS
+- **Monorepo**: Backend e frontend em um único repositório
+
+## 📋 Pré-requisitos
+
+- Node.js 18+ (via nvm recomendado)
+- pnpm 8+ (instale via `npm install -g pnpm`)
+- Git
+
+## 🛠️ Instalação e Configuração
+
+### 1. Clonar o repositório
+
+```bash
+git clone https://github.com/seu-usuario/atelie-restauracao-monorepo.git
+cd atelie-restauracao-monorepo
+```
+
+### 2. Configurar variáveis de ambiente
+
+Copie o arquivo de exemplo e configure:
+
+```bash
+cp .env.example .env
+```
+
+Edite o `.env` com suas configurações:
+
+```env
+# Backend
+BACKEND_PORT=3000
+JWT_SECRET=sua-chave-secreta-aqui
+JWT_EXPIRATION=60m
+
+# Database
+DATABASE_TYPE=sqlite
+DATABASE_PATH=data/tema9.db
+
+# Frontend
+FRONTEND_URL=http://localhost:4200
+```
+
+### 3. Instalar dependências
+
+```bash
+pnpm install
+```
+
+### 4. Rodar o projeto
+
+**Desenvolvimento** (ambos os servidores em paralelo):
+
+```bash
+pnpm dev
+```
+
+O backend estará disponível em `http://localhost:3000/api`
+O frontend estará disponível em `http://localhost:4200`
+
+**Produção**:
+
+```bash
+pnpm build
+pnpm start:prod
+```
+
+## 📚 Usuários Padrão
+
+### Admin
+- **E-mail**: `admin@atelie.com`
+- **Senha**: `admin123`
+- **Papel**: Administrador (pode gerenciar usuários)
+
+## 🏗️ Estrutura do Projeto
+
+```
+monorepo-ueg/
+├── apps/
+│   ├── backend/              # NestJS API
+│   │   ├── src/
+│   │   │   ├── auth/         # Módulo de autenticação
+│   │   │   ├── application/  # Services
+│   │   │   ├── infrastructure/
+│   │   │   ├── presentation/ # Controllers
+│   │   │   └── shared/
+│   │   └── package.json
+│   └── frontend/             # Angular 20
+│       ├── src/
+│       │   ├── app/
+│       │   │   ├── core/     # Guards, interceptors, services
+│       │   │   ├── features/ # Componentes por domínio
+│       │   │   └── app.routes.ts
+│       │   └── environments/
+│       └── package.json
+├── packages/
+│   ├── utils/                # Tipos compartilhados
+│   ├── typescript-config/    # tsconfig base
+│   └── eslint-config/        # ESLint compartilhado
+├── turbo.json
+├── pnpm-workspace.yaml
+└── README.md
+```
+
+## 📡 API Endpoints
+
+### Autenticação
+
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| POST | `/auth/register` | Registrar novo usuário |
+| POST | `/auth/login` | Fazer login |
+| GET | `/auth/users` | Listar usuários (admin) |
+| PATCH | `/auth/users/:id/activate` | Ativar/desativar usuário (admin) |
+
+### Atelies
+
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | `/atelies` | Listar atelies |
+| GET | `/atelies/:id` | Buscar atelie |
+| GET | `/atelies/:id/com-projetos` | Buscar atelie com projetos |
+| POST | `/atelies` | Criar atelie |
+| PATCH | `/atelies/:id` | Atualizar atelie |
+| DELETE | `/atelies/:id` | Deletar atelie |
+
+### Projetos
+
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | `/projetos` | Listar projetos |
+| GET | `/projetos/:id` | Buscar projeto |
+| POST | `/projetos` | Criar projeto |
+| PATCH | `/projetos/:id` | Atualizar projeto |
+| DELETE | `/projetos/:id` | Deletar projeto |
+
+## 🔑 Autenticação no Frontend
+
+O token JWT é armazenado em **sessionStorage** (não em localStorage por segurança). O interceptor HTTP adiciona automaticamente o Bearer token em todas as requisições autenticadas.
+
+Para acessar o token manualmente:
+
+```typescript
+const token = sessionStorage.getItem('auth_token');
+```
+
+## 🎨 Estilização
+
+O projeto utiliza **Tailwind CSS** v3 com configuração customizada em `apps/frontend/tailwind.config.js`.
+
+## 📊 Documentação da API (Swagger)
+
+Acesse em `http://localhost:3000/docs` para visualizar a documentação interativa da API.
+
+## 🧪 Testes
+
+```bash
+# Backend
+pnpm run test
+
+# Frontend
+pnpm run test
+```
+
+## 📝 Scripts Disponíveis
+
+```bash
+# Desenvolvimento
+pnpm dev          # Rodar ambos em paralelo
+pnpm build        # Compilar para produção
+pnpm test         # Rodar testes
+pnpm lint         # Verificar linting
+pnpm format       # Formatar código
+```
+
+## 🤝 Integrantes do Grupo
+
+- Rafael Oliveira Alves
+
+## 📄 Licença
+
+Este projeto é fornecido para fins educacionais.
+
+## 🆘 Suporte
+
+Para dúvidas ou problemas, abra uma issue no repositório.
 
 ##  Tema
 Tema 9 – Estúdio de Restauração de Móveis Antigos
