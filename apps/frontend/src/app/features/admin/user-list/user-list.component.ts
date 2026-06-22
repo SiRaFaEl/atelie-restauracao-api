@@ -1,9 +1,10 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import { getApiErrorMessage } from '../../../core/api-error';
+import { NotificationService } from '../../../core/services/notification.service';
 
 interface User {
   id: string;
@@ -19,72 +20,93 @@ interface User {
   standalone: true,
   imports: [CommonModule, RouterLink],
   template: `
-    <div class="min-h-screen bg-gray-100">
-      <nav class="bg-white shadow-sm mb-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <a routerLink="/dashboard" class="text-blue-600 hover:underline">&larr; Voltar</a>
+    <div class="app-shell">
+      <nav class="app-nav">
+        <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+          <a routerLink="/dashboard" class="text-link">&larr; Voltar ao painel</a>
+          <span class="text-sm font-semibold uppercase tracking-[0.24em] text-amber-900/70">
+            Usuarios
+          </span>
         </div>
       </nav>
 
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 class="text-3xl font-bold text-gray-900 mb-8">Gerenciamento de Usuários</h1>
-
-        <div *ngIf="isLoading()" class="bg-white p-8 rounded-lg shadow text-center">
-          <p class="text-gray-600">Carregando...</p>
+      <main class="page-wrap">
+        <div class="mb-8">
+          <p class="text-sm font-semibold uppercase tracking-[0.24em] text-amber-900/70">
+            Administracao
+          </p>
+          <h1 class="mt-2 text-3xl font-bold text-stone-950">Gerenciamento de usuarios</h1>
+          <p class="mt-2 text-stone-600">Ative ou desative acessos do sistema.</p>
         </div>
 
-        <div *ngIf="error()" class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
-          {{ error() }}
+        <div *ngIf="isLoading()" class="panel p-8 text-center">
+          <p class="text-stone-600">Carregando usuarios...</p>
         </div>
 
-        <div *ngIf="users().length > 0" class="bg-white rounded-lg shadow overflow-hidden">
-          <table class="min-w-full">
-            <thead class="bg-gray-50">
-              <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nome</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">E-mail</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Role</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Ações</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y">
-              <tr *ngFor="let user of users()" class="hover:bg-gray-50">
-                <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ user.nome }}</td>
-                <td class="px-6 py-4 text-sm text-gray-600">{{ user.email }}</td>
-                <td class="px-6 py-4 text-sm text-gray-600">
-                  <span [class]="user.role === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'" class="px-2 py-1 rounded text-xs">
-                    {{ user.role }}
-                  </span>
-                </td>
-                <td class="px-6 py-4 text-sm">
-                  <span [class]="user.ativo ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'" class="px-2 py-1 rounded text-xs">
-                    {{ user.ativo ? 'Ativo' : 'Inativo' }}
-                  </span>
-                </td>
-                <td class="px-6 py-4 text-right text-sm">
-                  <button
-                    (click)="toggleUserActive(user.id)"
-                    [disabled]="togglingIds().includes(user.id)"
-                    [class.opacity-50]="togglingIds().includes(user.id)"
-                    class="text-blue-600 hover:underline"
-                  >
-                    {{ user.ativo ? 'Desativar' : 'Ativar' }}
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        <div *ngIf="users().length > 0" class="panel overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="min-w-full">
+              <thead class="table-head">
+                <tr>
+                  <th class="px-6 py-3 text-left">Nome</th>
+                  <th class="px-6 py-3 text-left">E-mail</th>
+                  <th class="px-6 py-3 text-left">Role</th>
+                  <th class="px-6 py-3 text-left">Status</th>
+                  <th class="px-6 py-3 text-right">Acoes</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-amber-900/10">
+                <tr *ngFor="let user of users()" class="transition hover:bg-amber-50/60">
+                  <td class="px-6 py-4 text-sm font-semibold text-stone-950">{{ user.nome }}</td>
+                  <td class="px-6 py-4 text-sm text-stone-600">{{ user.email }}</td>
+                  <td class="px-6 py-4 text-sm text-stone-600">
+                    <span
+                      class="status-pill"
+                      [class.bg-amber-100]="user.role === 'admin'"
+                      [class.text-amber-950]="user.role === 'admin'"
+                      [class.bg-stone-100]="user.role !== 'admin'"
+                      [class.text-stone-700]="user.role !== 'admin'"
+                    >
+                      {{ user.role }}
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 text-sm">
+                    <span
+                      class="status-pill"
+                      [class.bg-emerald-100]="user.ativo"
+                      [class.text-emerald-900]="user.ativo"
+                      [class.bg-red-100]="!user.ativo"
+                      [class.text-red-900]="!user.ativo"
+                    >
+                      {{ user.ativo ? 'Ativo' : 'Inativo' }}
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 text-right text-sm">
+                    <button
+                      type="button"
+                      (click)="toggleUserActive(user.id)"
+                      [disabled]="togglingIds().includes(user.id)"
+                      class="font-semibold text-amber-900 transition hover:text-amber-700 hover:underline disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      {{ user.ativo ? 'Desativar' : 'Ativar' }}
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
 
-        <div *ngIf="!isLoading() && users().length === 0 && !error()" class="bg-white p-8 rounded-lg shadow text-center">
-          <p class="text-gray-600">Nenhum usuário encontrado</p>
+        <div *ngIf="!isLoading() && users().length === 0 && !error()" class="panel p-8 text-center">
+          <p class="text-stone-600">Nenhum usuario encontrado.</p>
         </div>
-      </div>
+      </main>
     </div>
   `,
 })
 export class UserListComponent {
+  private notifications = inject(NotificationService);
+
   users = signal<User[]>([]);
   isLoading = signal(true);
   error = signal('');
@@ -95,7 +117,7 @@ export class UserListComponent {
     this.loadUsers();
   }
 
-  loadUsers() {
+  loadUsers(): void {
     this.isLoading.set(true);
     this.error.set('');
     this.http.get<User[]>(this.apiUrl).subscribe({
@@ -104,23 +126,28 @@ export class UserListComponent {
         this.isLoading.set(false);
       },
       error: (err) => {
-        this.error.set(getApiErrorMessage(err));
+        const message = getApiErrorMessage(err);
+        this.error.set(message);
+        this.notifications.error(message);
         this.isLoading.set(false);
       },
     });
   }
 
-  toggleUserActive(userId: string) {
+  toggleUserActive(userId: string): void {
     const currentToggling = this.togglingIds();
     this.togglingIds.set([...currentToggling, userId]);
 
     this.http.patch(`${this.apiUrl}/${userId}/activate`, {}).subscribe({
       next: () => {
+        this.notifications.success('Status do usuario atualizado.');
         this.loadUsers();
         this.togglingIds.set(this.togglingIds().filter((id) => id !== userId));
       },
       error: (err) => {
-        this.error.set(getApiErrorMessage(err));
+        const message = getApiErrorMessage(err);
+        this.error.set(message);
+        this.notifications.error(message);
         this.togglingIds.set(this.togglingIds().filter((id) => id !== userId));
       },
     });

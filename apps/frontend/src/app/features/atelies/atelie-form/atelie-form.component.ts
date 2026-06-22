@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ReactiveFormsModule,
@@ -14,108 +14,91 @@ import {
   getApiErrorMessage,
   getApiFieldErrors,
 } from '../../../core/api-error';
+import { NotificationService } from '../../../core/services/notification.service';
 
 @Component({
   selector: 'app-atelie-form',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
   template: `
-    <div class="min-h-screen bg-gray-100">
-      <nav class="bg-white shadow-sm mb-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <a routerLink="/atelies" class="text-blue-600 hover:underline">&larr; Voltar</a>
+    <div class="app-shell">
+      <nav class="app-nav">
+        <div class="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+          <a routerLink="/atelies" class="text-link">&larr; Voltar para atelies</a>
         </div>
       </nav>
 
-      <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 class="text-3xl font-bold text-gray-900 mb-8">
-          {{ isEditing() ? 'Editar Atelie' : 'Novo Atelie' }}
-        </h1>
-
-        <div *ngIf="success()" class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded mb-4">
-          {{ success() }}
+      <main class="mx-auto w-full max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
+        <div class="mb-8">
+          <p class="text-sm font-semibold uppercase tracking-[0.24em] text-amber-900/70">
+            Oficina de restauracao
+          </p>
+          <h1 class="mt-2 text-3xl font-bold text-stone-950">
+            {{ isEditing() ? 'Editar atelie' : 'Novo atelie' }}
+          </h1>
+          <p class="mt-2 text-stone-600">
+            Cadastre especialidade, fundacao e estrutura disponivel para restaurar moveis.
+          </p>
         </div>
 
-        <div *ngIf="error()" class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
-          {{ error() }}
-        </div>
-
-        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="bg-white p-8 rounded-lg shadow space-y-6">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="panel space-y-6 p-8">
           <div>
-            <label class="block text-sm font-medium text-gray-700">Especialidade / era</label>
+            <label class="form-label">Especialidade / era</label>
             <input
               type="text"
               formControlName="especialidadeEra"
-              class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              class="form-control"
+              placeholder="Ex.: moveis coloniais, art deco"
             />
-            <div *ngIf="fieldMessage('especialidadeEra')" class="text-red-600 text-sm mt-1">
+            <div *ngIf="fieldMessage('especialidadeEra')" class="mt-1 text-sm text-red-700">
               {{ fieldMessage('especialidadeEra') }}
             </div>
           </div>
 
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Data de fundacao</label>
-            <input
-              type="date"
-              formControlName="dataFundacao"
-              class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-            />
-            <div *ngIf="fieldMessage('dataFundacao')" class="text-red-600 text-sm mt-1">
-              {{ fieldMessage('dataFundacao') }}
+          <div class="grid gap-6 sm:grid-cols-2">
+            <div>
+              <label class="form-label">Data de fundacao</label>
+              <input type="date" formControlName="dataFundacao" class="form-control" />
+              <div *ngIf="fieldMessage('dataFundacao')" class="mt-1 text-sm text-red-700">
+                {{ fieldMessage('dataFundacao') }}
+              </div>
+            </div>
+
+            <div>
+              <label class="form-label">Area da oficina (m2)</label>
+              <input type="number" formControlName="areaOficinaM2" class="form-control" />
+              <div *ngIf="fieldMessage('areaOficinaM2')" class="mt-1 text-sm text-red-700">
+                {{ fieldMessage('areaOficinaM2') }}
+              </div>
             </div>
           </div>
 
-          <label class="flex items-center gap-3 text-sm font-medium text-gray-700">
+          <label class="flex items-center gap-3 rounded-lg border border-amber-900/10 bg-amber-50/70 px-4 py-3 text-sm font-semibold text-stone-700">
             <input
               type="checkbox"
               formControlName="equipadoCompleto"
-              class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              class="h-4 w-4 rounded border-amber-900/30 text-amber-800 focus:ring-amber-700"
             />
             Equipado completo
           </label>
-          <div *ngIf="fieldMessage('equipadoCompleto')" class="text-red-600 text-sm -mt-4">
-            {{ fieldMessage('equipadoCompleto') }}
-          </div>
 
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Area da oficina (m2)</label>
-            <input
-              type="number"
-              formControlName="areaOficinaM2"
-              class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-            />
-            <div *ngIf="fieldMessage('areaOficinaM2')" class="text-red-600 text-sm mt-1">
-              {{ fieldMessage('areaOficinaM2') }}
-            </div>
-          </div>
-
-          <div class="flex gap-4">
-            <button
-              type="submit"
-              [disabled]="isLoading()"
-              class="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-bold py-2 px-4 rounded-lg"
-            >
-              {{ isLoading() ? 'Salvando...' : 'Salvar' }}
-            </button>
-            <button
-              type="button"
-              routerLink="/atelies"
-              class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-900 font-bold py-2 px-4 rounded-lg"
-            >
-              Cancelar
+          <div class="flex flex-col-reverse gap-3 sm:flex-row">
+            <a routerLink="/atelies" class="btn-secondary flex-1">Cancelar</a>
+            <button type="submit" [disabled]="isLoading()" class="btn-primary flex-1">
+              {{ isLoading() ? 'Salvando...' : 'Salvar atelie' }}
             </button>
           </div>
         </form>
-      </div>
+      </main>
     </div>
   `,
 })
 export class AtelieFormComponent {
+  private notifications = inject(NotificationService);
+
   form: FormGroup;
   isLoading = signal(false);
   isEditing = signal(false);
-  error = signal('');
-  success = signal('');
   fieldErrors = signal<FieldErrors>({});
   private apiUrl = `${environment.apiUrl}/atelies`;
 
@@ -140,7 +123,7 @@ export class AtelieFormComponent {
     });
   }
 
-  loadAtelie(id: number) {
+  loadAtelie(id: number): void {
     this.isLoading.set(true);
     this.http.get(`${this.apiUrl}/${id}`).subscribe({
       next: (data: any) => {
@@ -148,21 +131,20 @@ export class AtelieFormComponent {
         this.isLoading.set(false);
       },
       error: (err) => {
-        this.error.set(getApiErrorMessage(err));
+        this.notifications.error(getApiErrorMessage(err));
         this.isLoading.set(false);
       },
     });
   }
 
-  onSubmit() {
+  onSubmit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
+      this.notifications.warning('Revise os campos obrigatorios.');
       return;
     }
 
     this.isLoading.set(true);
-    this.error.set('');
-    this.success.set('');
     this.fieldErrors.set({});
 
     const payload = {
@@ -176,11 +158,11 @@ export class AtelieFormComponent {
 
     request.subscribe({
       next: () => {
-        this.success.set('Atelie salvo com sucesso.');
+        this.notifications.success('Atelie salvo com sucesso.');
         this.router.navigate(['/atelies']);
       },
       error: (err) => {
-        this.error.set(getApiErrorMessage(err));
+        this.notifications.error(getApiErrorMessage(err));
         this.fieldErrors.set(getApiFieldErrors(err));
         this.isLoading.set(false);
       },

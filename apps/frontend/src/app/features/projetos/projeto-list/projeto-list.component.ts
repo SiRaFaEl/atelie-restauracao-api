@@ -1,9 +1,11 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import { getApiErrorMessage } from '../../../core/api-error';
+import { ConfirmModalComponent } from '../../../core/components/confirm-modal/confirm-modal.component';
+import { NotificationService } from '../../../core/services/notification.service';
 
 interface Projeto {
   id: number;
@@ -20,95 +22,120 @@ interface Projeto {
 @Component({
   selector: 'app-projeto-list',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, ConfirmModalComponent],
   template: `
-    <div class="min-h-screen bg-gray-100">
-      <nav class="bg-white shadow-sm mb-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <a routerLink="/dashboard" class="text-blue-600 hover:underline">&larr; Voltar</a>
+    <div class="app-shell">
+      <nav class="app-nav">
+        <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+          <a routerLink="/dashboard" class="text-link">&larr; Voltar ao painel</a>
+          <span class="text-sm font-semibold uppercase tracking-[0.24em] text-amber-900/70">
+            Projetos
+          </span>
         </div>
       </nav>
 
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center mb-8">
-          <h1 class="text-3xl font-bold text-gray-900">Projetos de Moveis</h1>
-          <a
-            routerLink="/projetos/novo"
-            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          >
-            + Novo Projeto
-          </a>
+      <main class="page-wrap">
+        <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p class="text-sm font-semibold uppercase tracking-[0.24em] text-amber-900/70">
+              Restauracao de moveis
+            </p>
+            <h1 class="mt-2 text-3xl font-bold text-stone-950">Projetos em andamento</h1>
+            <p class="mt-2 max-w-2xl text-stone-600">
+              Acompanhe pecas, horas de trabalho e status de restauracao.
+            </p>
+          </div>
+          <a routerLink="/projetos/novo" class="btn-primary">+ Novo projeto</a>
         </div>
 
-        <div *ngIf="isLoading()" class="bg-white p-8 rounded-lg shadow text-center">
-          <p class="text-gray-600">Carregando...</p>
+        <div *ngIf="isLoading()" class="panel p-8 text-center">
+          <p class="text-stone-600">Carregando projetos...</p>
         </div>
 
-        <div *ngIf="message()" class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded mb-4">
-          {{ message() }}
+        <div *ngIf="!isLoading() && projetos().length === 0 && !error()" class="panel p-8 text-center">
+          <p class="text-stone-600">
+            Nenhum projeto cadastrado.
+            <a routerLink="/projetos/novo" class="text-link">Criar novo</a>
+          </p>
         </div>
 
-        <div *ngIf="error()" class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
-          {{ error() }}
+        <div *ngIf="projetos().length > 0" class="panel overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="min-w-full">
+              <thead class="table-head">
+                <tr>
+                  <th class="px-6 py-3 text-left">Tipo</th>
+                  <th class="px-6 py-3 text-left">Atelie</th>
+                  <th class="px-6 py-3 text-left">Inicio</th>
+                  <th class="px-6 py-3 text-left">Status</th>
+                  <th class="px-6 py-3 text-left">Horas</th>
+                  <th class="px-6 py-3 text-right">Acoes</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-amber-900/10">
+                <tr *ngFor="let projeto of projetos()" class="transition hover:bg-amber-50/60">
+                  <td class="px-6 py-4 text-sm font-semibold text-stone-950">{{ projeto.tipoMovel }}</td>
+                  <td class="px-6 py-4 text-sm text-stone-600">
+                    {{ projeto.atelie?.especialidadeEra || projeto.atelieId }}
+                  </td>
+                  <td class="px-6 py-4 text-sm text-stone-600">
+                    {{ projeto.dataInicioTrab | date: 'dd/MM/yyyy' }}
+                  </td>
+                  <td class="px-6 py-4 text-sm">
+                    <span
+                      class="status-pill"
+                      [class.bg-emerald-100]="projeto.restaurado"
+                      [class.text-emerald-900]="projeto.restaurado"
+                      [class.bg-amber-100]="!projeto.restaurado"
+                      [class.text-amber-950]="!projeto.restaurado"
+                    >
+                      {{ projeto.restaurado ? 'Restaurado' : 'Em aberto' }}
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 text-sm text-stone-600">{{ projeto.horasHomem }}h</td>
+                  <td class="px-6 py-4 text-right text-sm">
+                    <a [routerLink]="['/projetos/editar', projeto.id]" class="text-link">Editar</a>
+                    <button
+                      type="button"
+                      (click)="askDeleteProjeto(projeto.id)"
+                      class="ml-4 font-semibold text-red-700 hover:text-red-800 hover:underline"
+                    >
+                      Deletar
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
+      </main>
 
-        <div *ngIf="!isLoading() && projetos().length === 0 && !error()" class="bg-white p-8 rounded-lg shadow text-center">
-          <p class="text-gray-600">Nenhum projeto cadastrado. <a routerLink="/projetos/novo" class="text-blue-600 hover:underline">Criar novo</a></p>
-        </div>
-
-        <div *ngIf="projetos().length > 0" class="bg-white rounded-lg shadow overflow-hidden">
-          <table class="min-w-full">
-            <thead class="bg-gray-50">
-              <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tipo</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Atelie</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Inicio</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Horas</th>
-                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Acoes</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y">
-              <tr *ngFor="let projeto of projetos()" class="hover:bg-gray-50">
-                <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ projeto.tipoMovel }}</td>
-                <td class="px-6 py-4 text-sm text-gray-600">{{ projeto.atelie?.especialidadeEra || projeto.atelieId }}</td>
-                <td class="px-6 py-4 text-sm text-gray-600">{{ projeto.dataInicioTrab | date: 'dd/MM/yyyy' }}</td>
-                <td class="px-6 py-4 text-sm text-gray-600">{{ projeto.restaurado ? 'Restaurado' : 'Em aberto' }}</td>
-                <td class="px-6 py-4 text-sm text-gray-600">{{ projeto.horasHomem }}</td>
-                <td class="px-6 py-4 text-right text-sm space-x-2">
-                  <a
-                    [routerLink]="['/projetos/editar', projeto.id]"
-                    class="text-blue-600 hover:underline"
-                  >
-                    Editar
-                  </a>
-                  <button
-                    (click)="deleteProjeto(projeto.id)"
-                    class="text-red-600 hover:underline ml-4"
-                  >
-                    Deletar
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <app-confirm-modal
+        [open]="pendingDeleteId() !== null"
+        title="Remover projeto"
+        message="Esta acao remove o projeto de restauracao selecionado. Deseja continuar?"
+        confirmLabel="Remover"
+        cancelLabel="Cancelar"
+        (confirm)="confirmDeleteProjeto()"
+        (cancel)="pendingDeleteId.set(null)"
+      />
     </div>
   `,
 })
 export class ProjetoListComponent {
+  private notifications = inject(NotificationService);
+
   projetos = signal<Projeto[]>([]);
   isLoading = signal(true);
   error = signal('');
-  message = signal('');
+  pendingDeleteId = signal<number | null>(null);
   private apiUrl = `${environment.apiUrl}/projetos`;
 
   constructor(private http: HttpClient) {
     this.loadProjetos();
   }
 
-  loadProjetos() {
+  loadProjetos(): void {
     this.isLoading.set(true);
     this.error.set('');
     this.http.get<Projeto[]>(this.apiUrl).subscribe({
@@ -117,26 +144,35 @@ export class ProjetoListComponent {
         this.isLoading.set(false);
       },
       error: (err) => {
-        this.error.set(getApiErrorMessage(err));
+        const message = getApiErrorMessage(err);
+        this.error.set(message);
+        this.notifications.error(message);
         this.isLoading.set(false);
       },
     });
   }
 
-  deleteProjeto(id: number) {
-    if (!confirm('Tem certeza que deseja deletar este projeto?')) {
+  askDeleteProjeto(id: number): void {
+    this.pendingDeleteId.set(id);
+  }
+
+  confirmDeleteProjeto(): void {
+    const id = this.pendingDeleteId();
+    if (id === null) {
       return;
     }
 
     this.error.set('');
-    this.message.set('');
+    this.pendingDeleteId.set(null);
     this.http.delete(`${this.apiUrl}/${id}`).subscribe({
       next: () => {
-        this.message.set('Projeto removido com sucesso.');
+        this.notifications.success('Projeto removido com sucesso.');
         this.loadProjetos();
       },
       error: (err) => {
-        this.error.set(getApiErrorMessage(err));
+        const message = getApiErrorMessage(err);
+        this.error.set(message);
+        this.notifications.error(message);
       },
     });
   }

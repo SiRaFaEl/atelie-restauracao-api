@@ -8,73 +8,88 @@ import { AuthService } from '../../core/services/auth.service';
   standalone: true,
   imports: [CommonModule, RouterLink],
   template: `
-    <div class="min-h-screen bg-gray-100">
-      <nav class="bg-white shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-          <h1 class="text-2xl font-bold text-gray-900">Ateliê Restauração</h1>
-          <div class="flex items-center gap-4">
-            <span class="text-gray-700">Bem-vindo, <strong>{{ userName() }}</strong></span>
-            <button
-              (click)="logout()"
-              class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Sair
-            </button>
+    <div class="app-shell">
+      <nav class="app-nav">
+        <div class="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-[0.28em] text-amber-900/70">
+              Gestao de oficina
+            </p>
+            <h1 class="mt-1 text-2xl font-bold text-stone-950">Atelie Restauracao</h1>
+          </div>
+          <div class="flex flex-wrap items-center gap-3">
+            <span class="text-sm text-stone-700">
+              Bem-vindo, <strong>{{ userName() }}</strong>
+            </span>
+            <button type="button" (click)="logout()" class="btn-danger">Sair</button>
           </div>
         </div>
       </nav>
 
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h2 class="text-3xl font-bold text-gray-900 mb-8">Dashboard</h2>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Atelies</h3>
-            <p class="text-gray-600 mb-4">Gerenciar atelies de restauração</p>
-            <a
-              routerLink="/atelies"
-              class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Acessar
-            </a>
+      <main class="page-wrap">
+        <section class="mb-8 overflow-hidden rounded-lg bg-amber-950 text-amber-50 shadow-[0_24px_55px_rgba(73,45,24,0.20)]">
+          <div class="grid gap-8 p-8 lg:grid-cols-[1.2fr_0.8fr] lg:p-10">
+            <div>
+              <p class="text-sm font-semibold uppercase tracking-[0.28em] text-amber-200">
+                Madeira, historia e cuidado
+              </p>
+              <h2 class="mt-4 max-w-3xl text-4xl font-bold">
+                Controle cada restauracao, do diagnostico ao acabamento.
+              </h2>
+              <p class="mt-4 max-w-2xl text-amber-100">
+                Centralize atelies, projetos, prazos e horas de trabalho com uma interface mais clara para rotina de oficina.
+              </p>
+            </div>
+            <div class="rounded-lg border border-amber-200/20 bg-white/10 p-6">
+              <p class="text-sm uppercase tracking-[0.24em] text-amber-200">Fluxo rapido</p>
+              <div class="mt-5 space-y-3 text-sm text-amber-50">
+                <p>1. Cadastre a oficina responsavel.</p>
+                <p>2. Abra o projeto do movel.</p>
+                <p>3. Atualize status e horas ate finalizar.</p>
+              </div>
+            </div>
           </div>
+        </section>
 
-          <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Projetos de Móveis</h3>
-            <p class="text-gray-600 mb-4">Gerenciar projetos de móveis</p>
-            <a
-              routerLink="/projetos"
-              class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Acessar
-            </a>
-          </div>
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <article class="panel p-6 transition hover:-translate-y-0.5 hover:shadow-[0_22px_50px_rgba(73,45,24,0.14)]">
+            <p class="text-sm font-semibold uppercase tracking-[0.2em] text-amber-900/70">Oficinas</p>
+            <h3 class="mt-3 text-xl font-bold text-stone-950">Atelies</h3>
+            <p class="mt-3 text-stone-600">Gerencie especialidades, estrutura e capacidade dos atelies.</p>
+            <a routerLink="/atelies" class="btn-primary mt-6">Acessar</a>
+          </article>
 
-          <div *ngIf="isAdmin()" class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Usuários</h3>
-            <p class="text-gray-600 mb-4">Gerenciar usuários do sistema</p>
-            <a
-              routerLink="/admin/users"
-              class="inline-block bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Acessar
-            </a>
-          </div>
+          <article class="panel p-6 transition hover:-translate-y-0.5 hover:shadow-[0_22px_50px_rgba(73,45,24,0.14)]">
+            <p class="text-sm font-semibold uppercase tracking-[0.2em] text-amber-900/70">Pecas</p>
+            <h3 class="mt-3 text-xl font-bold text-stone-950">Projetos de moveis</h3>
+            <p class="mt-3 text-stone-600">Acompanhe moveis em restauracao, horas investidas e status.</p>
+            <a routerLink="/projetos" class="btn-primary mt-6">Acessar</a>
+          </article>
+
+          <article
+            *ngIf="isAdmin()"
+            class="panel p-6 transition hover:-translate-y-0.5 hover:shadow-[0_22px_50px_rgba(73,45,24,0.14)]"
+          >
+            <p class="text-sm font-semibold uppercase tracking-[0.2em] text-amber-900/70">Acesso</p>
+            <h3 class="mt-3 text-xl font-bold text-stone-950">Usuarios</h3>
+            <p class="mt-3 text-stone-600">Controle usuarios autorizados no sistema.</p>
+            <a routerLink="/admin/users" class="btn-secondary mt-6">Acessar</a>
+          </article>
         </div>
-      </div>
+      </main>
     </div>
   `,
 })
 export class DashboardComponent {
   constructor(private authService: AuthService) {}
 
-  userName = computed(() => this.authService.user()?.nome || 'Usuário');
+  userName = computed(() => this.authService.user()?.nome || 'Usuario');
 
-  isAdmin() {
+  isAdmin(): boolean {
     return this.authService.isAdmin();
   }
 
-  logout() {
+  logout(): void {
     this.authService.logout();
   }
 }
