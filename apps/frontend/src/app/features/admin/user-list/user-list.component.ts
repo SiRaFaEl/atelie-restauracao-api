@@ -25,7 +25,7 @@ interface User {
         <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
           <a routerLink="/dashboard" class="text-link">&larr; Voltar ao painel</a>
           <span class="text-sm font-semibold uppercase tracking-[0.24em] text-amber-900/70">
-            Usuarios
+            Usuários
           </span>
         </div>
       </nav>
@@ -33,14 +33,14 @@ interface User {
       <main class="page-wrap">
         <div class="mb-8">
           <p class="text-sm font-semibold uppercase tracking-[0.24em] text-amber-900/70">
-            Administracao
+            Administração
           </p>
-          <h1 class="mt-2 text-3xl font-bold text-stone-950">Gerenciamento de usuarios</h1>
+          <h1 class="mt-2 text-3xl font-bold text-stone-950">Gerenciamento de usuários</h1>
           <p class="mt-2 text-stone-600">Ative ou desative acessos do sistema.</p>
         </div>
 
         <div *ngIf="isLoading()" class="panel p-8 text-center">
-          <p class="text-stone-600">Carregando usuarios...</p>
+          <p class="text-stone-600">Carregando usuários...</p>
         </div>
 
         <div *ngIf="users().length > 0" class="panel overflow-hidden">
@@ -52,7 +52,7 @@ interface User {
                   <th class="px-6 py-3 text-left">E-mail</th>
                   <th class="px-6 py-3 text-left">Role</th>
                   <th class="px-6 py-3 text-left">Status</th>
-                  <th class="px-6 py-3 text-right">Acoes</th>
+                  <th class="px-6 py-3 text-right">Ações</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-amber-900/10">
@@ -98,7 +98,7 @@ interface User {
         </div>
 
         <div *ngIf="!isLoading() && users().length === 0 && !error()" class="panel p-8 text-center">
-          <p class="text-stone-600">Nenhum usuario encontrado.</p>
+          <p class="text-stone-600">Nenhum usuário encontrado.</p>
         </div>
       </main>
     </div>
@@ -140,7 +140,7 @@ export class UserListComponent {
 
     this.http.patch(`${this.apiUrl}/${userId}/activate`, {}).subscribe({
       next: () => {
-        this.notifications.success('Status do usuario atualizado.');
+        this.notifications.success('Status do usuário atualizado.');
         this.loadUsers();
         this.togglingIds.set(this.togglingIds().filter((id) => id !== userId));
       },

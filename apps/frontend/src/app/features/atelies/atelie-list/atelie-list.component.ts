@@ -25,7 +25,7 @@ interface Atelie {
         <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
           <a routerLink="/dashboard" class="text-link">&larr; Voltar ao painel</a>
           <span class="text-sm font-semibold uppercase tracking-[0.24em] text-amber-900/70">
-            Atelies
+            Ateliês
           </span>
         </div>
       </nav>
@@ -36,21 +36,21 @@ interface Atelie {
             <p class="text-sm font-semibold uppercase tracking-[0.24em] text-amber-900/70">
               Oficinas cadastradas
             </p>
-            <h1 class="mt-2 text-3xl font-bold text-stone-950">Atelies de restauracao</h1>
+            <h1 class="mt-2 text-3xl font-bold text-stone-950">Ateliês de restauração</h1>
             <p class="mt-2 max-w-2xl text-stone-600">
               Organize especialidades, estrutura e capacidade de cada oficina.
             </p>
           </div>
-          <a routerLink="/atelies/novo" class="btn-primary">+ Novo atelie</a>
+          <a routerLink="/atelies/novo" class="btn-primary">+ Novo ateliê</a>
         </div>
 
         <div *ngIf="isLoading()" class="panel p-8 text-center">
-          <p class="text-stone-600">Carregando atelies...</p>
+          <p class="text-stone-600">Carregando ateliês...</p>
         </div>
 
         <div *ngIf="!isLoading() && atelies().length === 0 && !error()" class="panel p-8 text-center">
           <p class="text-stone-600">
-            Nenhum atelie cadastrado.
+            Nenhum ateliê cadastrado.
             <a routerLink="/atelies/novo" class="text-link">Criar novo</a>
           </p>
         </div>
@@ -61,10 +61,10 @@ interface Atelie {
               <thead class="table-head">
                 <tr>
                   <th class="px-6 py-3 text-left">Especialidade</th>
-                  <th class="px-6 py-3 text-left">Fundacao</th>
+                  <th class="px-6 py-3 text-left">Fundação</th>
                   <th class="px-6 py-3 text-left">Equipado</th>
-                  <th class="px-6 py-3 text-left">Area</th>
-                  <th class="px-6 py-3 text-right">Acoes</th>
+                  <th class="px-6 py-3 text-left">Área</th>
+                  <th class="px-6 py-3 text-right">Ações</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-amber-900/10">
@@ -83,7 +83,7 @@ interface Atelie {
                       [class.bg-stone-100]="!atelie.equipadoCompleto"
                       [class.text-stone-700]="!atelie.equipadoCompleto"
                     >
-                      {{ atelie.equipadoCompleto ? 'Sim' : 'Nao' }}
+                      {{ atelie.equipadoCompleto ? 'Sim' : 'Não' }}
                     </span>
                   </td>
                   <td class="px-6 py-4 text-sm text-stone-600">{{ atelie.areaOficinaM2 }} m2</td>
@@ -106,8 +106,8 @@ interface Atelie {
 
       <app-confirm-modal
         [open]="pendingDeleteId() !== null"
-        title="Remover atelie"
-        message="Esta acao remove o atelie selecionado. Deseja continuar?"
+        title="Remover ateliê"
+        message="Esta ação remove o ateliê selecionado. Deseja continuar?"
         confirmLabel="Remover"
         cancelLabel="Cancelar"
         (confirm)="confirmDeleteAtelie()"
@@ -160,7 +160,7 @@ export class AtelieListComponent {
     this.pendingDeleteId.set(null);
     this.http.delete(`${this.apiUrl}/${id}`).subscribe({
       next: () => {
-        this.notifications.success('Atelie removido com sucesso.');
+        this.notifications.success('Ateliê removido com sucesso.');
         this.loadAtelies();
       },
       error: (err) => {

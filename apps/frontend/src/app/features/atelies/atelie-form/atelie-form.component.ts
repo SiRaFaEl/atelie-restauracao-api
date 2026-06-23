@@ -24,20 +24,20 @@ import { NotificationService } from '../../../core/services/notification.service
     <div class="app-shell">
       <nav class="app-nav">
         <div class="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
-          <a routerLink="/atelies" class="text-link">&larr; Voltar para atelies</a>
+          <a routerLink="/atelies" class="text-link">&larr; Voltar para ateliês</a>
         </div>
       </nav>
 
       <main class="mx-auto w-full max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
         <div class="mb-8">
           <p class="text-sm font-semibold uppercase tracking-[0.24em] text-amber-900/70">
-            Oficina de restauracao
+            Oficina de restauração
           </p>
           <h1 class="mt-2 text-3xl font-bold text-stone-950">
-            {{ isEditing() ? 'Editar atelie' : 'Novo atelie' }}
+            {{ isEditing() ? 'Editar ateliê' : 'Novo ateliê' }}
           </h1>
           <p class="mt-2 text-stone-600">
-            Cadastre especialidade, fundacao e estrutura disponivel para restaurar moveis.
+            Cadastre especialidade, fundação e estrutura disponível para restaurar móveis.
           </p>
         </div>
 
@@ -48,7 +48,7 @@ import { NotificationService } from '../../../core/services/notification.service
               type="text"
               formControlName="especialidadeEra"
               class="form-control"
-              placeholder="Ex.: moveis coloniais, art deco"
+              placeholder="Ex.: móveis coloniais, art déco"
             />
             <div *ngIf="fieldMessage('especialidadeEra')" class="mt-1 text-sm text-red-700">
               {{ fieldMessage('especialidadeEra') }}
@@ -57,7 +57,7 @@ import { NotificationService } from '../../../core/services/notification.service
 
           <div class="grid gap-6 sm:grid-cols-2">
             <div>
-              <label class="form-label">Data de fundacao</label>
+              <label class="form-label">Data de fundação</label>
               <input type="date" formControlName="dataFundacao" class="form-control" />
               <div *ngIf="fieldMessage('dataFundacao')" class="mt-1 text-sm text-red-700">
                 {{ fieldMessage('dataFundacao') }}
@@ -65,7 +65,7 @@ import { NotificationService } from '../../../core/services/notification.service
             </div>
 
             <div>
-              <label class="form-label">Area da oficina (m2)</label>
+              <label class="form-label">Área da oficina (m2)</label>
               <input type="number" formControlName="areaOficinaM2" class="form-control" />
               <div *ngIf="fieldMessage('areaOficinaM2')" class="mt-1 text-sm text-red-700">
                 {{ fieldMessage('areaOficinaM2') }}
@@ -85,7 +85,7 @@ import { NotificationService } from '../../../core/services/notification.service
           <div class="flex flex-col-reverse gap-3 sm:flex-row">
             <a routerLink="/atelies" class="btn-secondary flex-1">Cancelar</a>
             <button type="submit" [disabled]="isLoading()" class="btn-primary flex-1">
-              {{ isLoading() ? 'Salvando...' : 'Salvar atelie' }}
+              {{ isLoading() ? 'Salvando...' : 'Salvar ateliê' }}
             </button>
           </div>
         </form>
@@ -140,7 +140,7 @@ export class AtelieFormComponent {
   onSubmit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      this.notifications.warning('Revise os campos obrigatorios.');
+      this.notifications.warning('Revise os campos obrigatórios.');
       return;
     }
 
@@ -158,7 +158,7 @@ export class AtelieFormComponent {
 
     request.subscribe({
       next: () => {
-        this.notifications.success('Atelie salvo com sucesso.');
+        this.notifications.success('Ateliê salvo com sucesso.');
         this.router.navigate(['/atelies']);
       },
       error: (err) => {
@@ -177,7 +177,7 @@ export class AtelieFormComponent {
 
     const control = this.form.get(field);
     if (control?.hasError('required') && control.touched) {
-      return 'Campo obrigatorio.';
+      return 'Campo obrigatório.';
     }
 
     return '';

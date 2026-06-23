@@ -16,7 +16,7 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
     return next(clonedRequest).pipe(
       catchError((error) => {
         if (error.status === 401) {
-          authService.logout('Sessao expirada. Faca login novamente.');
+          authService.logout('Sessão expirada. Faça login novamente.');
         }
         return throwError(() => error);
       }),

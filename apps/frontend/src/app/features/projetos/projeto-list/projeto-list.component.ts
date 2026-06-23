@@ -38,11 +38,11 @@ interface Projeto {
         <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p class="text-sm font-semibold uppercase tracking-[0.24em] text-amber-900/70">
-              Restauracao de moveis
+              Restauração de móveis
             </p>
             <h1 class="mt-2 text-3xl font-bold text-stone-950">Projetos em andamento</h1>
             <p class="mt-2 max-w-2xl text-stone-600">
-              Acompanhe pecas, horas de trabalho e status de restauracao.
+              Acompanhe peças, horas de trabalho e status de restauração.
             </p>
           </div>
           <a routerLink="/projetos/novo" class="btn-primary">+ Novo projeto</a>
@@ -65,11 +65,11 @@ interface Projeto {
               <thead class="table-head">
                 <tr>
                   <th class="px-6 py-3 text-left">Tipo</th>
-                  <th class="px-6 py-3 text-left">Atelie</th>
-                  <th class="px-6 py-3 text-left">Inicio</th>
+                  <th class="px-6 py-3 text-left">Ateliê</th>
+                  <th class="px-6 py-3 text-left">Início</th>
                   <th class="px-6 py-3 text-left">Status</th>
                   <th class="px-6 py-3 text-left">Horas</th>
-                  <th class="px-6 py-3 text-right">Acoes</th>
+                  <th class="px-6 py-3 text-right">Ações</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-amber-900/10">
@@ -113,7 +113,7 @@ interface Projeto {
       <app-confirm-modal
         [open]="pendingDeleteId() !== null"
         title="Remover projeto"
-        message="Esta acao remove o projeto de restauracao selecionado. Deseja continuar?"
+        message="Esta ação remove o projeto de restauração selecionado. Deseja continuar?"
         confirmLabel="Remover"
         cancelLabel="Cancelar"
         (confirm)="confirmDeleteProjeto()"

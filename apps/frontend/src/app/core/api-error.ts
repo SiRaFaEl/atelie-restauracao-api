@@ -4,7 +4,7 @@ export type FieldErrors = Record<string, string[]>;
 
 export function getApiErrorMessage(error: unknown): string {
   if (error instanceof HttpErrorResponse && error.status === 0) {
-    return 'Nao foi possivel conectar ao servidor. Verifique sua conexao.';
+    return 'Não foi possível conectar ao servidor. Verifique sua conexão.';
   }
 
   if (error instanceof HttpErrorResponse) {
@@ -17,7 +17,7 @@ export function getApiErrorMessage(error: unknown): string {
     }
   }
 
-  return 'Nao foi possivel concluir a operacao. Tente novamente.';
+  return 'Não foi possível concluir a operação. Tente novamente.';
 }
 
 export function getApiFieldErrors(error: unknown): FieldErrors {

@@ -24,7 +24,7 @@ export class FieldErrorComponent {
   @Input() fieldName = '';
 
   /** Mensagem customizada para erro `required`. */
-  @Input() requiredMessage = 'Campo obrigatorio.';
+  @Input() requiredMessage = 'Campo obrigatório.';
 
   message = computed(() => {
     const apiErrors = this.fieldErrors ?? {};
@@ -41,11 +41,11 @@ export class FieldErrorComponent {
       return this.requiredMessage;
     }
     if (ctrl.hasError('email')) {
-      return 'Informe um e-mail valido.';
+      return 'Informe um e-mail válido.';
     }
     if (ctrl.hasError('minlength')) {
       const min = ctrl.getError('minlength')?.requiredLength;
-      return `Minimo de ${min ?? 0} caracteres.`;
+      return `Mínimo de ${min ?? 0} caracteres.`;
     }
     return '';
   });

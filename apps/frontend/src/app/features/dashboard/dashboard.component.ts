@@ -13,9 +13,9 @@ import { AuthService } from '../../core/services/auth.service';
         <div class="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
           <div>
             <p class="text-xs font-semibold uppercase tracking-[0.28em] text-amber-900/70">
-              Gestao de oficina
+              Gestão de oficina
             </p>
-            <h1 class="mt-1 text-2xl font-bold text-stone-950">Atelie Restauracao</h1>
+            <h1 class="mt-1 text-2xl font-bold text-stone-950">Ateliê Restauração</h1>
           </div>
           <div class="flex flex-wrap items-center gap-3">
             <span class="text-sm text-stone-700">
@@ -31,21 +31,21 @@ import { AuthService } from '../../core/services/auth.service';
           <div class="grid gap-8 p-8 lg:grid-cols-[1.2fr_0.8fr] lg:p-10">
             <div>
               <p class="text-sm font-semibold uppercase tracking-[0.28em] text-amber-200">
-                Madeira, historia e cuidado
+                Madeira, história e cuidado
               </p>
               <h2 class="mt-4 max-w-3xl text-4xl font-bold">
-                Controle cada restauracao, do diagnostico ao acabamento.
+                Controle cada restauração, do diagnóstico ao acabamento.
               </h2>
               <p class="mt-4 max-w-2xl text-amber-100">
-                Centralize atelies, projetos, prazos e horas de trabalho com uma interface mais clara para rotina de oficina.
+                Centralize ateliês, projetos, prazos e horas de trabalho com uma interface mais clara para rotina de oficina.
               </p>
             </div>
             <div class="rounded-lg border border-amber-200/20 bg-white/10 p-6">
-              <p class="text-sm uppercase tracking-[0.24em] text-amber-200">Fluxo rapido</p>
+              <p class="text-sm uppercase tracking-[0.24em] text-amber-200">Fluxo rápido</p>
               <div class="mt-5 space-y-3 text-sm text-amber-50">
-                <p>1. Cadastre a oficina responsavel.</p>
-                <p>2. Abra o projeto do movel.</p>
-                <p>3. Atualize status e horas ate finalizar.</p>
+                <p>1. Cadastre a oficina responsável.</p>
+                <p>2. Abra o projeto do móvel.</p>
+                <p>3. Atualize status e horas até finalizar.</p>
               </div>
             </div>
           </div>
@@ -54,15 +54,15 @@ import { AuthService } from '../../core/services/auth.service';
         <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           <article class="panel p-6 transition hover:-translate-y-0.5 hover:shadow-[0_22px_50px_rgba(73,45,24,0.14)]">
             <p class="text-sm font-semibold uppercase tracking-[0.2em] text-amber-900/70">Oficinas</p>
-            <h3 class="mt-3 text-xl font-bold text-stone-950">Atelies</h3>
-            <p class="mt-3 text-stone-600">Gerencie especialidades, estrutura e capacidade dos atelies.</p>
+            <h3 class="mt-3 text-xl font-bold text-stone-950">Ateliês</h3>
+            <p class="mt-3 text-stone-600">Gerencie especialidades, estrutura e capacidade dos ateliês.</p>
             <a routerLink="/atelies" class="btn-primary mt-6">Acessar</a>
           </article>
 
           <article class="panel p-6 transition hover:-translate-y-0.5 hover:shadow-[0_22px_50px_rgba(73,45,24,0.14)]">
-            <p class="text-sm font-semibold uppercase tracking-[0.2em] text-amber-900/70">Pecas</p>
-            <h3 class="mt-3 text-xl font-bold text-stone-950">Projetos de moveis</h3>
-            <p class="mt-3 text-stone-600">Acompanhe moveis em restauracao, horas investidas e status.</p>
+            <p class="text-sm font-semibold uppercase tracking-[0.2em] text-amber-900/70">Peças</p>
+            <h3 class="mt-3 text-xl font-bold text-stone-950">Projetos de móveis</h3>
+            <p class="mt-3 text-stone-600">Acompanhe móveis em restauração, horas investidas e status.</p>
             <a routerLink="/projetos" class="btn-primary mt-6">Acessar</a>
           </article>
 
@@ -71,9 +71,9 @@ import { AuthService } from '../../core/services/auth.service';
             class="panel p-6 transition hover:-translate-y-0.5 hover:shadow-[0_22px_50px_rgba(73,45,24,0.14)]"
           >
             <p class="text-sm font-semibold uppercase tracking-[0.2em] text-amber-900/70">Acesso</p>
-            <h3 class="mt-3 text-xl font-bold text-stone-950">Usuarios</h3>
-            <p class="mt-3 text-stone-600">Controle usuarios autorizados no sistema.</p>
-            <a routerLink="/admin/users" class="btn-secondary mt-6">Acessar</a>
+            <h3 class="mt-3 text-xl font-bold text-stone-950">Usuários</h3>
+            <p class="mt-3 text-stone-600">Controle usuários autorizados no sistema.</p>
+            <a routerLink="/admin/users" class="btn-primary mt-6">Acessar</a>
           </article>
         </div>
       </main>
@@ -83,7 +83,7 @@ import { AuthService } from '../../core/services/auth.service';
 export class DashboardComponent {
   constructor(private authService: AuthService) {}
 
-  userName = computed(() => this.authService.user()?.nome || 'Usuario');
+  userName = computed(() => this.authService.user()?.nome || 'Usuário');
 
   isAdmin(): boolean {
     return this.authService.isAdmin();

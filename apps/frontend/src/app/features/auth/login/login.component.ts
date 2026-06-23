@@ -20,10 +20,10 @@ import { NotificationService } from '../../../core/services/notification.service
       <div class="grid w-full max-w-5xl overflow-hidden rounded-lg bg-white shadow-[0_24px_65px_rgba(73,45,24,0.18)] lg:grid-cols-[1fr_0.9fr]">
         <section class="hidden bg-amber-950 p-10 text-amber-50 lg:block">
           <p class="text-sm font-semibold uppercase tracking-[0.28em] text-amber-200">
-            Atelie Restauracao
+            Ateliê Restauração
           </p>
           <h1 class="mt-5 text-4xl font-bold leading-tight">
-            Gestao feita para quem devolve vida aos moveis.
+            Gestão feita para quem devolve vida aos móveis.
           </h1>
           <p class="mt-5 text-amber-100">
             Controle oficinas, projetos e horas de trabalho em uma rotina visualmente mais acolhedora.
@@ -47,7 +47,7 @@ import { NotificationService } from '../../../core/services/notification.service
                 placeholder="seu@email.com"
               />
               <div *ngIf="isFieldInvalid('email')" class="mt-1 text-sm text-red-700">
-                Informe um e-mail valido.
+                Informe um e-mail válido.
               </div>
             </div>
 
@@ -61,7 +61,7 @@ import { NotificationService } from '../../../core/services/notification.service
                 placeholder="Sua senha"
               />
               <div *ngIf="isFieldInvalid('senha')" class="mt-1 text-sm text-red-700">
-                Senha e obrigatoria.
+                Senha é obrigatória.
               </div>
             </div>
 
@@ -71,7 +71,7 @@ import { NotificationService } from '../../../core/services/notification.service
           </form>
 
           <p class="mt-6 text-center text-stone-600">
-            Nao tem conta?
+            Não tem conta?
             <a routerLink="/register" class="text-link">Cadastre-se aqui</a>
           </p>
         </section>

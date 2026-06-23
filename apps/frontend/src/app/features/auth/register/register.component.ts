@@ -28,7 +28,7 @@ import { NotificationService } from '../../../core/services/notification.service
             <label for="nome" class="form-label">Nome completo</label>
             <input type="text" id="nome" formControlName="nome" class="form-control" placeholder="Seu nome" />
             <div *ngIf="isFieldInvalid('nome')" class="mt-1 text-sm text-red-700">
-              Nome e obrigatorio.
+              Nome é obrigatório.
             </div>
           </div>
 
@@ -42,7 +42,7 @@ import { NotificationService } from '../../../core/services/notification.service
               placeholder="seu@email.com"
             />
             <div *ngIf="isFieldInvalid('email')" class="mt-1 text-sm text-red-700">
-              Informe um e-mail valido.
+                Informe um e-mail válido.
             </div>
           </div>
 
@@ -53,10 +53,10 @@ import { NotificationService } from '../../../core/services/notification.service
               id="senha"
               formControlName="senha"
               class="form-control"
-              placeholder="Minimo 6 caracteres"
+                placeholder="Mínimo 6 caracteres"
             />
             <div *ngIf="isFieldInvalid('senha')" class="mt-1 text-sm text-red-700">
-              Senha deve ter no minimo 6 caracteres.
+              Senha deve ter no mínimo 6 caracteres.
             </div>
           </div>
 
@@ -66,8 +66,8 @@ import { NotificationService } from '../../../core/services/notification.service
         </form>
 
         <p class="mt-6 text-center text-stone-600">
-          Ja tem conta?
-          <a routerLink="/login" class="text-link">Faca login</a>
+          Já tem conta?
+          <a routerLink="/login" class="text-link">Faça login</a>
         </p>
       </div>
     </div>
@@ -94,7 +94,7 @@ export class RegisterComponent {
   onSubmit(): void {
     if (this.registerForm.invalid) {
       this.registerForm.markAllAsTouched();
-      this.notifications.warning('Revise os campos obrigatorios.');
+      this.notifications.warning('Revise os campos obrigatórios.');
       return;
     }
 

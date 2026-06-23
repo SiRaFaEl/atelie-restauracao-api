@@ -36,19 +36,19 @@ interface Atelie {
       <main class="mx-auto w-full max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
         <div class="mb-8">
           <p class="text-sm font-semibold uppercase tracking-[0.24em] text-amber-900/70">
-            Projeto de restauracao
+            Projeto de restauração
           </p>
           <h1 class="mt-2 text-3xl font-bold text-stone-950">
             {{ isEditing() ? 'Editar projeto' : 'Novo projeto' }}
           </h1>
           <p class="mt-2 text-stone-600">
-            Registre a peca, a oficina responsavel e o tempo previsto de trabalho.
+            Registre a peça, a oficina responsável e o tempo previsto de trabalho.
           </p>
         </div>
 
         <form [formGroup]="form" (ngSubmit)="onSubmit()" class="panel space-y-6 p-8">
           <div>
-            <label class="form-label">Tipo do movel</label>
+            <label class="form-label">Tipo do móvel</label>
             <input type="text" formControlName="tipoMovel" class="form-control" placeholder="Ex.: cadeira colonial" />
             <div *ngIf="fieldMessage('tipoMovel')" class="mt-1 text-sm text-red-700">
               {{ fieldMessage('tipoMovel') }}
@@ -56,9 +56,9 @@ interface Atelie {
           </div>
 
           <div>
-            <label class="form-label">Atelie</label>
+            <label class="form-label">Ateliê</label>
             <select formControlName="atelieId" class="form-control">
-              <option value="">Selecione um atelie</option>
+              <option value="">Selecione um ateliê</option>
               <option *ngFor="let atelie of atelies()" [value]="atelie.id">
                 {{ atelie.especialidadeEra }}
               </option>
@@ -70,7 +70,7 @@ interface Atelie {
 
           <div class="grid gap-6 sm:grid-cols-2">
             <div>
-              <label class="form-label">Data de inicio</label>
+              <label class="form-label">Data de início</label>
               <input type="date" formControlName="dataInicioTrab" class="form-control" />
               <div *ngIf="fieldMessage('dataInicioTrab')" class="mt-1 text-sm text-red-700">
                 {{ fieldMessage('dataInicioTrab') }}
@@ -92,7 +92,7 @@ interface Atelie {
               formControlName="restaurado"
               class="h-4 w-4 rounded border-amber-900/30 text-amber-800 focus:ring-amber-700"
             />
-            Movel restaurado
+            Móvel restaurado
           </label>
 
           <div class="flex flex-col-reverse gap-3 sm:flex-row">
@@ -175,7 +175,7 @@ export class ProjetoFormComponent {
   onSubmit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      this.notifications.warning('Revise os campos obrigatorios.');
+      this.notifications.warning('Revise os campos obrigatórios.');
       return;
     }
 
@@ -213,7 +213,7 @@ export class ProjetoFormComponent {
 
     const control = this.form.get(field);
     if (control?.hasError('required') && control.touched) {
-      return 'Campo obrigatorio.';
+      return 'Campo obrigatório.';
     }
 
     return '';

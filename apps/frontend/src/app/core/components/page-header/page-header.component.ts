@@ -13,11 +13,11 @@ import { Router } from '@angular/router';
     <nav class="bg-white shadow-sm">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
         <a routerLink="/dashboard" class="text-2xl font-bold text-gray-900">
-          Atelie Restauracao
+          Ateliê Restauração
         </a>
         <div class="flex items-center gap-4">
           <span class="text-gray-700">
-            Ola, <strong>{{ userName() }}</strong>
+            Olá, <strong>{{ userName() }}</strong>
           </span>
           <button
             type="button"
@@ -36,11 +36,11 @@ export class PageHeaderComponent {
   private router = inject(Router);
   private notifications = inject(NotificationService);
 
-  userName = computed(() => this.authService.user()?.nome || 'Usuario');
+  userName = computed(() => this.authService.user()?.nome || 'Usuário');
 
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);
-    this.notifications.info('Voce saiu da sua conta.');
+    this.notifications.info('Você saiu da sua conta.');
   }
 }
