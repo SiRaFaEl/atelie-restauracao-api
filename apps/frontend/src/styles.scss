@@ -13,17 +13,31 @@ body {
 body {
   color: #2f241d;
   background:
-    radial-gradient(circle at top left, rgba(184, 118, 59, 0.16), transparent 34rem),
-    linear-gradient(135deg, #fff8ef 0%, #f4eadb 48%, #ead9c4 100%);
+    radial-gradient(circle at 12% 8%, rgba(255, 214, 145, 0.22), transparent 28rem),
+    radial-gradient(circle at 86% 18%, rgba(92, 45, 20, 0.12), transparent 24rem),
+    linear-gradient(135deg, #fff8ef 0%, #f1e4d0 46%, #e5cfb4 100%);
 }
 
 @layer components {
   .app-shell {
-    @apply min-h-screen bg-[radial-gradient(circle_at_top_left,rgba(183,113,42,0.18),transparent_34rem),linear-gradient(135deg,#fff8ef_0%,#f4eadb_48%,#ead9c4_100%)] text-stone-900;
+    @apply min-h-screen text-stone-900;
+    background:
+      linear-gradient(90deg, rgba(94, 52, 30, 0.035) 1px, transparent 1px),
+      linear-gradient(0deg, rgba(94, 52, 30, 0.03) 1px, transparent 1px),
+      radial-gradient(circle at 12% 8%, rgba(255, 214, 145, 0.22), transparent 28rem),
+      radial-gradient(circle at 86% 18%, rgba(92, 45, 20, 0.12), transparent 24rem),
+      linear-gradient(135deg, #fff8ef 0%, #f1e4d0 46%, #e5cfb4 100%);
+    background-size:
+      44px 44px,
+      44px 44px,
+      auto,
+      auto,
+      auto;
   }
 
   .app-nav {
     @apply border-b border-amber-900/10 bg-white/80 shadow-sm backdrop-blur;
+    box-shadow: 0 10px 28px rgba(73, 45, 24, 0.08);
   }
 
   .page-wrap {
@@ -31,19 +45,40 @@ body {
   }
 
   .panel {
-    @apply rounded-lg border border-amber-900/10 bg-white/90 shadow-[0_18px_45px_rgba(73,45,24,0.10)];
+    @apply rounded-lg border border-amber-900/10 shadow-[0_18px_45px_rgba(73,45,24,0.10)];
+    background:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(255, 250, 241, 0.9)),
+      repeating-linear-gradient(
+        92deg,
+        rgba(118, 65, 35, 0.07) 0,
+        rgba(118, 65, 35, 0.07) 2px,
+        rgba(255, 255, 255, 0.04) 2px,
+        rgba(255, 255, 255, 0.04) 12px
+      ),
+      linear-gradient(120deg, #f9efe0, #fffaf2 46%, #ead2b8);
+    box-shadow:
+      0 22px 54px rgba(73, 45, 24, 0.13),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.42);
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center rounded-lg bg-amber-800 px-4 py-2 font-semibold text-white shadow-sm transition hover:bg-amber-900 disabled:cursor-not-allowed disabled:bg-stone-400;
+    @apply inline-flex items-center justify-center rounded-lg px-4 py-2 font-semibold text-white transition disabled:cursor-not-allowed disabled:bg-stone-400;
+    background: linear-gradient(135deg, #a6420c 0%, #7c2f0a 48%, #4e1e08 100%);
+    box-shadow:
+      0 12px 22px rgba(124, 47, 10, 0.22),
+      inset 0 1px 0 rgba(255, 224, 176, 0.28);
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center rounded-lg border border-amber-900/20 bg-white px-4 py-2 font-semibold text-amber-950 transition hover:bg-amber-50;
+    @apply inline-flex items-center justify-center rounded-lg border border-amber-900/20 px-4 py-2 font-semibold text-amber-950 transition hover:bg-amber-50;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(255, 248, 238, 0.92));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
   }
 
   .btn-danger {
     @apply inline-flex items-center justify-center rounded-lg bg-red-700 px-4 py-2 font-semibold text-white transition hover:bg-red-800 disabled:cursor-not-allowed disabled:bg-stone-400;
+    box-shadow: 0 12px 22px rgba(127, 29, 29, 0.18);
   }
 
   .text-link {
@@ -52,6 +87,9 @@ body {
 
   .form-control {
     @apply mt-1 block w-full rounded-lg border border-amber-900/20 bg-white px-4 py-2.5 text-stone-900 shadow-sm outline-none transition placeholder:text-stone-400 focus:border-amber-700 focus:ring-2 focus:ring-amber-700/20;
+    box-shadow:
+      inset 0 1px 2px rgba(73, 45, 24, 0.06),
+      0 1px 0 rgba(255, 255, 255, 0.72);
   }
 
   .form-label {
@@ -59,10 +97,73 @@ body {
   }
 
   .table-head {
-    @apply bg-amber-950 text-xs font-semibold uppercase tracking-wide text-amber-50;
+    @apply text-xs font-semibold uppercase tracking-wide text-amber-50;
+    background:
+      linear-gradient(90deg, rgba(255, 213, 128, 0.12), transparent 32%),
+      linear-gradient(135deg, #4b1d08, #78350f);
   }
 
   .status-pill {
     @apply inline-flex rounded-full px-3 py-1 text-xs font-semibold;
+    box-shadow: inset 0 0 0 1px rgba(73, 45, 24, 0.06);
   }
+}
+
+.panel:hover {
+  border-color: rgba(146, 64, 14, 0.2);
+  box-shadow:
+    0 26px 62px rgba(73, 45, 24, 0.17),
+    inset 0 1px 0 rgba(255, 255, 255, 0.86),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.48);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #b45309 0%, #8a360b 48%, #5b2308 100%);
+  transform: translateY(-1px);
+}
+
+.btn-secondary:hover {
+  border-color: rgba(146, 64, 14, 0.34);
+  box-shadow:
+    0 10px 20px rgba(73, 45, 24, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.78);
+}
+
+.page-wrap > section.bg-amber-950 {
+  position: relative;
+  border: 1px solid rgba(255, 215, 160, 0.18);
+  background:
+    linear-gradient(135deg, rgba(255, 214, 145, 0.12), transparent 42%),
+    repeating-linear-gradient(
+      92deg,
+      rgba(255, 229, 181, 0.055) 0,
+      rgba(255, 229, 181, 0.055) 2px,
+      transparent 2px,
+      transparent 16px
+    ),
+    linear-gradient(135deg, #4b1d08 0%, #5f2308 54%, #341205 100%) !important;
+  box-shadow:
+    0 28px 70px rgba(73, 45, 24, 0.24),
+    inset 0 1px 0 rgba(255, 238, 204, 0.16);
+}
+
+.page-wrap > section.bg-amber-950::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, transparent, rgba(255, 210, 128, 0.08), transparent),
+    radial-gradient(circle at 82% 18%, rgba(255, 210, 128, 0.16), transparent 18rem);
+}
+
+.page-wrap > .grid article.panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.page-wrap > .grid article.panel .btn-primary,
+.page-wrap > .grid article.panel .btn-secondary {
+  align-self: flex-start;
+  margin-top: auto;
 }

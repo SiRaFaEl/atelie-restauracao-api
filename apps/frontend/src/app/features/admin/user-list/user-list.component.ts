@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import { getApiErrorMessage } from '../../../core/api-error';
+import { ConfirmModalComponent } from '../../../core/components/confirm-modal/confirm-modal.component';
 import { NotificationService } from '../../../core/services/notification.service';
 
 interface User {
@@ -18,7 +19,7 @@ interface User {
 @Component({
   selector: 'app-user-list',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, ConfirmModalComponent],
   template: `
     <div class="app-shell">
       <nav class="app-nav">
@@ -90,6 +91,14 @@ interface User {
                     >
                       {{ user.ativo ? 'Desativar' : 'Ativar' }}
                     </button>
+                    <button
+                      *ngIf="user.role !== 'admin'"
+                      type="button"
+                      (click)="askDeleteUser(user.id)"
+                      class="ml-4 font-semibold text-red-700 transition hover:text-red-800 hover:underline"
+                    >
+                      Excluir
+                    </button>
                   </td>
                 </tr>
               </tbody>
@@ -101,6 +110,16 @@ interface User {
           <p class="text-stone-600">Nenhum usuário encontrado.</p>
         </div>
       </main>
+
+      <app-confirm-modal
+        [open]="pendingDeleteId() !== null"
+        title="Excluir usuário"
+        message="Esta ação remove o usuário selecionado. Deseja continuar?"
+        confirmLabel="Excluir"
+        cancelLabel="Cancelar"
+        (confirm)="confirmDeleteUser()"
+        (cancel)="pendingDeleteId.set(null)"
+      />
     </div>
   `,
 })
@@ -111,6 +130,7 @@ export class UserListComponent {
   isLoading = signal(true);
   error = signal('');
   togglingIds = signal<string[]>([]);
+  pendingDeleteId = signal<string | null>(null);
   private apiUrl = `${environment.apiUrl}/users`;
 
   constructor(private http: HttpClient) {
@@ -149,6 +169,30 @@ export class UserListComponent {
         this.error.set(message);
         this.notifications.error(message);
         this.togglingIds.set(this.togglingIds().filter((id) => id !== userId));
+      },
+    });
+  }
+
+  askDeleteUser(userId: string): void {
+    this.pendingDeleteId.set(userId);
+  }
+
+  confirmDeleteUser(): void {
+    const userId = this.pendingDeleteId();
+    if (userId === null) {
+      return;
+    }
+
+    this.pendingDeleteId.set(null);
+    this.http.delete<{ message?: string }>(`${this.apiUrl}/${userId}`).subscribe({
+      next: (response) => {
+        this.notifications.success(response.message || 'Usuário excluído com sucesso.');
+        this.loadUsers();
+      },
+      error: (err) => {
+        const message = getApiErrorMessage(err);
+        this.error.set(message);
+        this.notifications.error(message);
       },
     });
   }

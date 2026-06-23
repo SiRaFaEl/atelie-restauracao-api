@@ -110,4 +110,22 @@ export class AuthService {
     user.ativo = !user.ativo;
     return this.usersRepository.save(user);
   }
+
+  async deleteUser(userId: string): Promise<{ message: string }> {
+    const user = await this.usersRepository.findOne({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new BadRequestException('Usuário não encontrado.');
+    }
+
+    if (user.role === 'admin') {
+      throw new BadRequestException('Não é permitido excluir usuários administradores.');
+    }
+
+    await this.usersRepository.delete(userId);
+
+    return { message: 'Usuário excluído com sucesso.' };
+  }
 }

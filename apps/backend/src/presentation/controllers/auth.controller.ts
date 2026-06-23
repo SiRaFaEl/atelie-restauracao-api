@@ -2,6 +2,7 @@ import {
   Controller,
   Post,
   Body,
+  Delete,
   Get,
   Param,
   Patch,
@@ -41,5 +42,12 @@ export class AuthController {
   @ApiBearerAuth()
   async toggleUserActive(@Param('id') userId: string) {
     return this.authService.toggleUserActive(userId);
+  }
+
+  @Delete('users/:id')
+  @UseGuards(AdminGuard)
+  @ApiBearerAuth()
+  async deleteUser(@Param('id') userId: string) {
+    return this.authService.deleteUser(userId);
   }
 }

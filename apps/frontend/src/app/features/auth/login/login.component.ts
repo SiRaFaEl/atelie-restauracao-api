@@ -63,6 +63,15 @@ import { NotificationService } from '../../../core/services/notification.service
               <div *ngIf="isFieldInvalid('senha')" class="mt-1 text-sm text-red-700">
                 Senha é obrigatória.
               </div>
+              <div class="mt-2 text-right">
+                <button
+                  type="button"
+                  (click)="showPasswordRecoveryInfo()"
+                  class="text-link text-sm"
+                >
+                  Esqueci minha senha
+                </button>
+              </div>
             </div>
 
             <button type="submit" [disabled]="isLoading()" class="btn-primary w-full">
@@ -126,5 +135,11 @@ export class LoginComponent {
   isFieldInvalid(field: string): boolean {
     const formField = this.loginForm.get(field);
     return !!(formField && formField.invalid && formField.touched);
+  }
+
+  showPasswordRecoveryInfo(): void {
+    this.notifications.info(
+      'Recuperação de senha em desenvolvimento. Entre em contato com o administrador.',
+    );
   }
 }

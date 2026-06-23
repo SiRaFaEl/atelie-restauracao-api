@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Patch, UseGuards } from '@nestjs/common';
+import { Controller, Delete, Get, Param, Patch, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthService } from '../../application/services/auth.service';
 import { AdminGuard } from '../../infrastructure/auth/admin.guard';
@@ -18,5 +18,10 @@ export class UsersController {
   @Patch(':id/activate')
   async toggleUserActive(@Param('id') userId: string) {
     return this.authService.toggleUserActive(userId);
+  }
+
+  @Delete(':id')
+  async deleteUser(@Param('id') userId: string) {
+    return this.authService.deleteUser(userId);
   }
 }

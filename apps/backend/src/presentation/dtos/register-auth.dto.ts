@@ -1,10 +1,13 @@
-import { IsEmail, IsNotEmpty, MinLength } from 'class-validator';
+import { IsEmail, IsNotEmpty, Matches, MinLength } from 'class-validator';
 
 export class RegisterAuthDto {
   @IsNotEmpty({ message: 'Nome é obrigatório' })
   nome: string;
 
   @IsEmail({}, { message: 'E-mail inválido' })
+  @Matches(/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/, {
+    message: 'Informe um e-mail com domínio válido',
+  })
   @IsNotEmpty({ message: 'E-mail é obrigatório' })
   email: string;
 
